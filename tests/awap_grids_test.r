@@ -59,6 +59,9 @@ for(measure in vars)
 {
   get_awap_data(start = '1990-01-01',end = '1990-01-01', measure)
 }
+get_awap_data(start = '2015-01-01', end = '2015-02-01', measure_i = 'ndviave')
+sapply(list.files('R/', full.names = T), source)
+
 fileslist <- dir(pattern="grid$")
 r <- readGDAL(fname=fileslist[5])
 image(r)

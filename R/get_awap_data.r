@@ -6,7 +6,12 @@ get_awap_data <- function(start, end, measure_i)
   variableslist <- variableslist()  
   variable <- variableslist[which(variableslist$measure == measure_i),]
   vname <- as.character(variable[,1])
-  datelist <- seq(as.Date(start), as.Date(end), 1)
+  if(variable$timestep == 'month') {
+    tstep = 'month'  
+  } else {
+    tstep = 'day'
+  }
+  datelist <- seq.Date(as.Date(start), as.Date(end), by = tstep)
   
   for(date_i in datelist)
   {
@@ -18,7 +23,6 @@ get_awap_data <- function(start, end, measure_i)
     } else {
       edate <- date_i
     }
-    
     if(!file.exists(sprintf("%s_%s%s.grid",measure_i,gsub("-","",sdate),gsub("-","",edate))))
     {
       get_data_range(variable=as.character(variable[,1]),
@@ -37,7 +41,7 @@ get_awap_data <- function(start, end, measure_i)
       {
         uncompress_linux(filename = fname)
       } else {
-        Decompress7Zip(zipFileName= fname, outputDirectory=getwd(), TRUE)
+        Decompress7Zip(zipFileName= fname, outputDirectory=getwd(), delete = TRUE)
       }
     }
   }
