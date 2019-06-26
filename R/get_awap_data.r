@@ -13,7 +13,11 @@ get_awap_data <- function(start, end, measure_i)
     # date_i <- datelist[1]
     date_i <- as.Date(date_i, origin = '1970-01-01')
     sdate <- as.character(date_i)
-    edate <- date_i
+    if(variable$timestep == 'month') {
+      edate = seq.Date(as.Date(sdate), as.Date(sdate) + 40, by='month')[2] - 1
+    } else {
+      edate <- date_i
+    }
     
     if(!file.exists(sprintf("%s_%s%s.grid",measure_i,gsub("-","",sdate),gsub("-","",edate))))
     {
@@ -22,7 +26,6 @@ get_awap_data <- function(start, end, measure_i)
                      timestep=as.character(variable[,3]),
                      startdate=as.POSIXct(sdate),
                      enddate=as.POSIXct(edate))
-      
       fname <- sprintf("%s_%s%s.grid.Z",measure_i,gsub("-","",sdate),gsub("-","",edate))
       if(file.info(fname)$size == 0)
       {
